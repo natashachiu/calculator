@@ -1,101 +1,98 @@
-
 let storeArr = [];
-
 let displayValue = "";
 
-function add(a, b) {
-    return (a + b);
-  };
-function subtract(a, b) {
-      return (a - b);
-  };
-function multiply(a, b) {
-    return (a * b);
-}
-function divide(a, b) {
-    return (a / b);
-}
-
-// takes an operator and 2 numbers, calls one of the above functions on the numbers.
 function operate(firstNum, secondNum, operator) {
-    if (operator == "+") return add(firstNum, secondNum);
-    if (operator == "-") return subtract(firstNum, secondNum);
-    if (operator == "*") return multiply(firstNum, secondNum);
-    if (operator == "/") return divide(firstNum, secondNum);
+    if (operator == "+") return (firstNum + secondNum);
+    if (operator == "-") return (firstNum - secondNum);
+    if (operator == "*") return (firstNum * secondNum);
+    if (operator == "/") return (firstNum / secondNum);
 
 }
 
-const btn_0 = document.querySelector("#zero");
-const btn_1 = document.querySelector("#one");
-const btn_2 = document.querySelector("#two");
-const btn_3 = document.querySelector("#three");
-const btn_4 = document.querySelector("#four");
-const btn_5 = document.querySelector("#five");
-const btn_6 = document.querySelector("#six");
-const btn_7 = document.querySelector("#seven");
-const btn_8 = document.querySelector("#eight");
-const btn_9 = document.querySelector("#nine");
-const plus_btn = document.querySelector("#plus");
-const minus_btn = document.querySelector("#minus");
-const multiply_btn = document.querySelector("#multiply");
-const divide_btn = document.querySelector("#div");
-const equal_btn = document.querySelector("#equal");
+const values = document.querySelectorAll('.value');
+values.forEach(value => {
+    value.addEventListener('mousedown', (e) => {
+        let num = e.target.textContent;
+        displayValue += num.toString();
+        display.textContent = displayValue;
+    })
+});
+
 const display = document.querySelector(".display");
 const ac = document.querySelector("#ac");
+const plus = document.querySelector("#plus");
+const minus = document.querySelector("#minus");
+const multiply = document.querySelector("#multiply");
+const divide = document.querySelector("#div");
+const equal = document.querySelector("#equal");
+// const dot = document.querySelector("#dot");
 
-
-btn_0.addEventListener('mousedown', () => displayValue += "0");
-btn_1.addEventListener('mousedown', () => displayValue += "1");
-btn_2.addEventListener('mousedown', () => displayValue += "2");
-btn_3.addEventListener('mousedown', () => displayValue += "3");
-btn_4.addEventListener('mousedown', () => displayValue += "4");
-btn_5.addEventListener('mousedown', () => displayValue += "5");
-btn_6.addEventListener('mousedown', () => displayValue += "6");
-btn_7.addEventListener('mousedown', () => displayValue += "7");
-btn_8.addEventListener('mousedown', () => displayValue += "8");
-btn_9.addEventListener('mousedown', () => displayValue += "9");
-plus_btn.addEventListener('mousedown', () => storeValues("+"));
-minus_btn.addEventListener('mousedown', () => storeValues("-"));
-multiply_btn.addEventListener('mousedown', () => storeValues("*"));
-divide_btn.addEventListener('mousedown', () => storeValues("/"));
-equal_btn.addEventListener('mousedown', () => storeValues("="));
 ac.addEventListener('mousedown', () => clearDisplay());
+plus.addEventListener('mousedown', () => storeValues("+"));
+minus.addEventListener('mousedown', () => storeValues("-"));
+multiply.addEventListener('mousedown', () => storeValues("*"));
+divide.addEventListener('mousedown', () => storeValues("/"));
+equal.addEventListener('mousedown', () => storeValues("="));
+// dot.addEventListener('mousedown', () => {
+//     displayValue += ".";
+//     display.textContent = displayValue;
+// })
 
 
 function storeValues(strOperator) {
+    if ((storeArr.length === 0)){ 
+        if (strOperator === "=") return; // "12 ="
+       
+        if (display.textContent !== "") { // "12 + 5 = * 2" or "12 + 5 = 2 +"
+            displayValue = display.textContent;
+        }
+        storeArr.push(displayValue); 
+        storeArr.push(strOperator);
     
-
-    if (storeArr.length === 0) {
-        storeArr.push(displayValue);
-        storeArr.push(strOperator);
-
-    } else if (storeArr.length === 1) {
-        storeArr.push(strOperator);
     } else {
+        if (displayValue === "") { // "12 + +"
+            displayValue = display.textContent;
+        }
         let firstNum = parseFloat(storeArr.shift());
         let operator = storeArr.shift();
         let secondNum = parseFloat(displayValue);
 
+        if (checkDivZero(operator, secondNum)) return;
+
         let result = operate(firstNum, secondNum, operator);
-        result = result.toFixed(6);
+        result = Math.round(result * 1000000) / 1000000;
         display.textContent = result;
-        storeArr.push(result);
         
         if (strOperator !== "=") {
+            storeArr.push(result);
             storeArr.push(strOperator);
         } 
-
     }
     console.log(storeArr);
 
     displayValue = "";
 }
 
+function checkDivZero(operator, secondNum) {
+    if (operator === "/" && secondNum === 0) {
+        display.textContent = "undefined :(";
+        displayValue = "";
+        storeArr.length = 0;
+        return true;
+    }
+    return false;
+}
 
-const values = document.querySelectorAll('.value');
-values.forEach(value => {
-    value.addEventListener('mousedown', () => display.textContent = displayValue)
-});
+// function checkDecimals(str) {
+//     let occ = 0;
+//     for (let i = 0; i < str.length; i++) {
+//         if (i === ".")
+//             occ ++;
+//     }
+//     if (occ > 1)
+//         dot.removeEventListener
+        
+// }
 
 
 function clearDisplay() {
@@ -103,9 +100,3 @@ function clearDisplay() {
     display.textContent = displayValue;
     storeArr.length = 0;
 }
-
-/* bugs
-    - display result with no decimals when not necessary, only 6 when needed 
-    - pressing "=" before entering all of the numbers or an operator
-    
-*/
