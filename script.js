@@ -1,42 +1,46 @@
 let storeArr = [];
 let displayValue = "";
+let isDotDisabled = false;
+
 
 function operate(firstNum, secondNum, operator) {
     if (operator == "+") return (firstNum + secondNum);
     if (operator == "-") return (firstNum - secondNum);
-    if (operator == "*") return (firstNum * secondNum);
-    if (operator == "/") return (firstNum / secondNum);
-
+    if (operator == "×") return (firstNum * secondNum);
+    if (operator == "÷") return (firstNum / secondNum);
 }
 
 const values = document.querySelectorAll('.value');
 values.forEach(value => {
     value.addEventListener('mousedown', (e) => {
-        let num = e.target.textContent;
-        displayValue += num.toString();
-        display.textContent = displayValue;
+        appendNumber(e);
     })
 });
 
+function appendNumber(e) {
+    if (display.textContent.length >= 9) return;
+    
+    displayValue += e.target.textContent.toString();
+    display.textContent = displayValue;
+}
+const operators = document.querySelectorAll('.op');
+operators.forEach(operator => {
+    operator.addEventListener('mousedown',(e) => {
+        storeValues(e.target.textContent);
+    })
+});
+
+window.addEventListener('keydown', handleKeyboardInput);
 const display = document.querySelector(".display");
 const ac = document.querySelector("#ac");
-const plus = document.querySelector("#plus");
-const minus = document.querySelector("#minus");
-const multiply = document.querySelector("#multiply");
-const divide = document.querySelector("#div");
-const equal = document.querySelector("#equal");
-// const dot = document.querySelector("#dot");
+const pn = document.querySelector("#pn");
+const dot = document.querySelector("#dot");
+const del = document.querySelector("#del");
 
-ac.addEventListener('mousedown', () => clearDisplay());
-plus.addEventListener('mousedown', () => storeValues("+"));
-minus.addEventListener('mousedown', () => storeValues("-"));
-multiply.addEventListener('mousedown', () => storeValues("*"));
-divide.addEventListener('mousedown', () => storeValues("/"));
-equal.addEventListener('mousedown', () => storeValues("="));
-// dot.addEventListener('mousedown', () => {
-//     displayValue += ".";
-//     display.textContent = displayValue;
-// })
+ac.addEventListener('mousedown', clearDisplay);
+pn.addEventListener('mousedown', appendPn);
+del.addEventListener('mousedown', deleteNumber);
+dot.addEventListener('mousedown', appendDot);
 
 
 function storeValues(strOperator) {
@@ -45,6 +49,8 @@ function storeValues(strOperator) {
        
         if (display.textContent !== "") { // "12 + 5 = * 2" or "12 + 5 = 2 +"
             displayValue = display.textContent;
+        } else {
+            return;
         }
         storeArr.push(displayValue); 
         storeArr.push(strOperator);
@@ -60,7 +66,10 @@ function storeValues(strOperator) {
         if (checkDivZero(operator, secondNum)) return;
 
         let result = operate(firstNum, secondNum, operator);
-        result = Math.round(result * 1000000) / 1000000;
+        result = Math.round(result * 1000) / 1000;
+
+        // doesn't show numbers that run off the screen
+        if (isResultHuge(result)) return; 
         display.textContent = result;
         
         if (strOperator !== "=") {
@@ -68,14 +77,13 @@ function storeValues(strOperator) {
             storeArr.push(strOperator);
         } 
     }
-    console.log(storeArr);
-
+    console.log(storeArr); /* DELETE THIS */
     displayValue = "";
 }
 
 function checkDivZero(operator, secondNum) {
-    if (operator === "/" && secondNum === 0) {
-        display.textContent = "undefined :(";
+    if (operator === "÷" && secondNum === 0) {
+        display.textContent = "undefined";
         displayValue = "";
         storeArr.length = 0;
         return true;
@@ -83,20 +91,51 @@ function checkDivZero(operator, secondNum) {
     return false;
 }
 
-// function checkDecimals(str) {
-//     let occ = 0;
-//     for (let i = 0; i < str.length; i++) {
-//         if (i === ".")
-//             occ ++;
-//     }
-//     if (occ > 1)
-//         dot.removeEventListener
-        
-// }
+function isResultHuge(result) {
+    if (result.toString().length > 10) {
+        display.textContent = "2 big 4 me";
+        displayValue = "";
+        storeArr.length = 0;
+        return true;
+    }
+    return false;
+}
 
+function appendDot() {
+    if (display.textContent.includes(".")) return;
+
+    displayValue += ".";
+    display.textContent = displayValue;
+}
+
+function appendPn() {
+    if (displayValue === "")
+        displayValue = "-";
+    else if ( displayValue === "-")
+        return;
+    else
+        displayValue *= -1;
+   
+    display.textContent = displayValue;
+}
+
+function deleteNumber() {
+    displayValue = displayValue.slice(0, -1);
+    display.textContent = displayValue;
+}
 
 function clearDisplay() {
     displayValue = "";
     display.textContent = displayValue;
     storeArr.length = 0;
 }
+
+function handleKeyboardInput(e) {
+    // if (e.key >=0 || e.key <= 9) appendNumber(e.key);
+    
+}
+
+
+// function convertOperator(operator) {
+//     if (operator === "/") return "÷";
+// }
