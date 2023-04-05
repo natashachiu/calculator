@@ -6,6 +6,7 @@
 body {
     background-color: papayawhip;
 }
+
 .container {
     display: flex;
     flex-direction: column;
@@ -25,7 +26,8 @@ body {
     min-width: 18rem;
     min-height: 4rem;
     margin-top: 1rem;
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
+    margin-left: 0.2rem;
     border: 3px inset #2e3d3a;
     padding: 0 0.5rem;
     padding-top: 0.7rem;
@@ -65,7 +67,7 @@ button {
     
 }
 
-button:active {
+button:active{
     box-shadow: 0;
     transform: translateY(2px); 
     filter: drop-shadow(2px 2px #2c2c2c);

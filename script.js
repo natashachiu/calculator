@@ -12,20 +12,21 @@ function operate(firstNum, secondNum, operator) {
 
 const values = document.querySelectorAll('.value');
 values.forEach(value => {
-    value.addEventListener('mousedown', (e) => {
-        appendNumber(e);
+    value.addEventListener('click', (e) => {
+        appendNumber(e.target.textContent);
     })
 });
 
-function appendNumber(e) {
-    if (display.textContent.length >= 9) return;
-    
-    displayValue += e.target.textContent.toString();
+function appendNumber(num) {
+    if (displayValue !== "" && display.textContent.length >= 9)
+        return; // disallows typing in more than 9 digits at once
+    displayValue += num.toString();
     display.textContent = displayValue;
 }
+
 const operators = document.querySelectorAll('.op');
 operators.forEach(operator => {
-    operator.addEventListener('mousedown',(e) => {
+    operator.addEventListener('click',(e) => {
         storeValues(e.target.textContent);
     })
 });
@@ -37,10 +38,10 @@ const pn = document.querySelector("#pn");
 const dot = document.querySelector("#dot");
 const del = document.querySelector("#del");
 
-ac.addEventListener('mousedown', clearDisplay);
-pn.addEventListener('mousedown', appendPn);
-del.addEventListener('mousedown', deleteNumber);
-dot.addEventListener('mousedown', appendDot);
+ac.addEventListener('click', clearDisplay);
+pn.addEventListener('click', appendPn);
+del.addEventListener('click', deleteNumber);
+dot.addEventListener('click', appendDot);
 
 
 function storeValues(strOperator) {
@@ -77,7 +78,7 @@ function storeValues(strOperator) {
             storeArr.push(strOperator);
         } 
     }
-    console.log(storeArr); /* DELETE THIS */
+    // console.log(storeArr); 
     displayValue = "";
 }
 
@@ -93,7 +94,7 @@ function checkDivZero(operator, secondNum) {
 
 function isResultHuge(result) {
     if (result.toString().length > 10) {
-        display.textContent = "2 big 4 me";
+        display.textContent = "too big :O";
         displayValue = "";
         storeArr.length = 0;
         return true;
@@ -131,11 +132,20 @@ function clearDisplay() {
 }
 
 function handleKeyboardInput(e) {
-    // if (e.key >=0 || e.key <= 9) appendNumber(e.key);
-    
+    if (e.defaultPrevented) {   //*****TEST THIS */
+        return; // Do nothing if the event was already processed
+    }
+    if (e.key >=0 || e.key <= 9) appendNumber(e.key);
+    if (e.key === "+" || e.key === "-" || e.key === "*" || e.key === "/") storeValues(convertOperator(e.key));
+    if (e.key === "Delete" || e.key === "Backspace") deleteNumber;
+    if (e.key === "Return" || e.key === "Enter") storeValues("=");
+    if (e.key === ".") appendDot;
+
+    e.preventDefault();
 }
 
 
-// function convertOperator(operator) {
-//     if (operator === "/") return "÷";
-// }
+function convertOperator(operator) {
+    if (operator === "/") return "÷";
+    if (operator === "*") return "×";
+}
