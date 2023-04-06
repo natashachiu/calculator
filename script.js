@@ -1,7 +1,5 @@
 let storeArr = [];
 let displayValue = "";
-let isDotDisabled = false;
-
 
 function operate(firstNum, secondNum, operator) {
     if (operator == "+") return (firstNum + secondNum);
@@ -132,7 +130,7 @@ function clearDisplay() {
 }
 
 function handleKeyboardInput(e) {
-    if (e.defaultPrevented) {   //*****TEST THIS */
+    if (e.defaultPrevented) {
         return; // Do nothing if the event was already processed
     }
     if (e.key >=0 || e.key <= 9) appendNumber(e.key);
@@ -143,7 +141,6 @@ function handleKeyboardInput(e) {
 
     e.preventDefault();
 }
-
 
 function convertOperator(operator) {
     if (operator === "/") return "÷";
