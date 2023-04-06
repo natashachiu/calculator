@@ -13,7 +13,7 @@ body {
     align-items: center;
     margin: 6rem auto;
     width: 21rem;
-    min-height: 31.5rem;
+    height: 31.5rem;
     background-color: #2e3d3a;
     border-radius: 25px;
     border: 6px groove slategrey;
@@ -23,12 +23,12 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    min-width: 18rem;
-    min-height: 4rem;
+    width: 18rem;
+    height: 4rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
     margin-left: 0.2rem;
-    border: 3px inset #2e3d3a;
+    border: 3.2px inset #2e3d3a;
     padding: 0 0.5rem;
     padding-top: 0.7rem;
     background-color: #8b8572;
@@ -38,8 +38,8 @@ body {
 }
 
 button {
-    min-width: 4.3rem;
-    min-height: 4.3rem;
+    width: 4.3rem;
+    height: 4.3rem;
     border-radius: 35%;
     margin: .2rem .1rem;
     font-size: 1rem;
@@ -47,10 +47,11 @@ button {
     color: beige;
     font-family: 'Lucida Sans', 'Lucida Sans Regular',sans-serif;
     font-weight: 100;
+    cursor: pointer;
 }
 
 #ac {
-    min-width: 9.1rem;    
+    width: 9.1rem;    
     border-radius: 25px;
 }
 
@@ -71,7 +72,6 @@ button:active{
     box-shadow: 0;
     transform: translateY(2px); 
     filter: drop-shadow(2px 2px #2c2c2c);
-
 }
 
 .footer {
@@ -84,7 +84,7 @@ button:active{
 }
 
 img {
-    max-width: 32px;
+    width: 32px;
     margin-bottom: -7px;
     margin-left: 0.2em;
 }

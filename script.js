@@ -10,7 +10,7 @@ function operate(firstNum, secondNum, operator) {
 
 const values = document.querySelectorAll('.value');
 values.forEach(value => {
-    value.addEventListener('click', (e) => {
+    value.addEventListener('mousedown', (e) => {
         appendNumber(e.target.textContent);
     })
 });
@@ -24,7 +24,7 @@ function appendNumber(num) {
 
 const operators = document.querySelectorAll('.op');
 operators.forEach(operator => {
-    operator.addEventListener('click',(e) => {
+    operator.addEventListener('mousedown',(e) => {
         storeValues(e.target.textContent);
     })
 });
@@ -36,10 +36,10 @@ const pn = document.querySelector("#pn");
 const dot = document.querySelector("#dot");
 const del = document.querySelector("#del");
 
-ac.addEventListener('click', clearDisplay);
-pn.addEventListener('click', appendPn);
-del.addEventListener('click', deleteNumber);
-dot.addEventListener('click', appendDot);
+ac.addEventListener('mousedown', clearDisplay);
+pn.addEventListener('mousedown', appendPn);
+del.addEventListener('mousedown', deleteNumber);
+dot.addEventListener('mousedown', appendDot);
 
 
 function storeValues(strOperator) {
